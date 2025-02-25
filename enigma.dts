@@ -2,46 +2,34 @@
 
 / {
     model = "Enigma";
-    compatible = "zmk,keyboard";
+    compatible = "zmk,keymap";
 
-    /* キーマトリクスの設定 */
-    kscan0: kscan0 {
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,matrix_transform = &default_transform;
+    };
+
+    kscan0: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         label = "KSCAN";
         diode-direction = "row2col";
+        rows = <4>;
+        cols = <10>;
         row-gpios
-            = <&xiao_d 0 GPIO_ACTIVE_HIGH>  /* P0.02 - row0 */
-            , <&xiao_d 15 GPIO_ACTIVE_HIGH> /* P0.10 - row1 */
-            , <&xiao_d 7 GPIO_ACTIVE_HIGH>  /* P1.12 - row2 */
-            , <&xiao_d 10 GPIO_ACTIVE_HIGH> /* P1.15 - row3 */
-            ;
+            = <&gpio0 2 GPIO_ACTIVE_LOW>   // P0.02 (D0)
+            , <&gpio0 10 GPIO_ACTIVE_LOW>  // P0.10 (D15)
+            , <&gpio1 12 GPIO_ACTIVE_LOW>  // P1.12 (D7)
+            , <&gpio1 15 GPIO_ACTIVE_LOW>; // P1.15 (D10)
         col-gpios
-            = <&xiao_d 11 GPIO_ACTIVE_HIGH> /* P0.15 - col0 */
-            , <&xiao_d 1 GPIO_ACTIVE_HIGH>  /* P0.03 - col1 */
-            , <&xiao_d 12 GPIO_ACTIVE_HIGH> /* P0.19 - col2 */
-            , <&xiao_d 2 GPIO_ACTIVE_HIGH>  /* P0.28 - col3 */
-            , <&xiao_d 13 GPIO_ACTIVE_HIGH> /* P1.01 - col4 */
-            , <&xiao_d 3 GPIO_ACTIVE_HIGH>  /* P0.29 - col5 */
-            , <&xiao_d 14 GPIO_ACTIVE_HIGH> /* P0.09 - col6 */
-            , <&xiao_d 4 GPIO_ACTIVE_HIGH>  /* P0.04 - col7 */
-            , <&xiao_d 8 GPIO_ACTIVE_HIGH>  /* P1.13 - col8 */
-            , <&xiao_d 9 GPIO_ACTIVE_HIGH>  /* P1.14 - col9 */
-            ;
+            = <&gpio0 15 GPIO_ACTIVE_HIGH> // P0.15 (D11)
+            , <&gpio0 3 GPIO_ACTIVE_HIGH>  // P0.03 (D1)
+            , <&gpio0 19 GPIO_ACTIVE_HIGH> // P0.19 (D12)
+            , <&gpio0 28 GPIO_ACTIVE_HIGH> // P0.28 (D2)
+            , <&gpio1 1 GPIO_ACTIVE_HIGH>  // P1.01 (D13)
+            , <&gpio0 29 GPIO_ACTIVE_HIGH> // P0.29 (D3)
+            , <&gpio0 9 GPIO_ACTIVE_HIGH>  // P0.09 (D14)
+            , <&gpio0 4 GPIO_ACTIVE_HIGH>  // P0.04 (D4)
+            , <&gpio1 13 GPIO_ACTIVE_HIGH> // P1.13 (D8)
+            , <&gpio1 14 GPIO_ACTIVE_HIGH>;// P1.14 (D9)
     };
-
-    /* バッテリー電圧測定設定 */
-    battery_voltage: battery_voltage {
-        compatible = "zmk,battery-voltage-divider";
-        label = "BATTERY_VOLTAGE";
-        sense-gpios = <&gpio0 31 GPIO_ACTIVE_HIGH>; /* P0.31 */
-        r1-ohms = <20000>; /* R1 = 20kΩ */
-        r2-ohms = <30000>; /* R2 = 30kΩ */
-    };
-
-    /* 内蔵RGB LED設定（仮に利用可能なピンを想定） */
-    rgb: rgb {
-        compatible = "zmk,rgb-led";
-        label = "RGB";
-        led-gpios = <&xiao_d 5 GPIO_ACTIVE_HIGH>; /* D5 (P0.05) を仮使用 */
-    };
-};​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+};
