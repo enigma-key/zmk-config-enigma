@@ -7,16 +7,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4  # checkoutも最新バージョンに更新
       - name: Build firmware
-        uses: zmkfirmware/zmk-build-action@main
+        uses: zmkfirmware/zmk-action@main  # zmk-build-actionの代替として仮定
         with:
           board: seeeduino_xiao_ble
           shield: enigma
           config: config/enigma.conf
           keymap: config/enigma.keymap
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # v3からv4に更新
         with:
           name: enigma-firmware
           path: |
