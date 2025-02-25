@@ -1,0 +1,39 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        /* デフォルトレイヤー (layer0) */
+        default_layer {
+            bindings = <
+                &kp Q     &kp W     &kp E     &kp R     &kp T     &kp Y     &kp U     &kp I     &kp O     &kp P
+                &kp A     &kp S     &kp D     &kp F     &kp G     &kp H     &kp J     &kp K     &kp L     &kp SCLN
+                &kp Z     &kp X     &kp C     &kp V     &kp B     &kp N     &kp M     &kp COMM  &kp DOT   &kp SLASH
+                &kp ESC   &kp TAB   &kp LSFT  &kp SPC   &mo 1     &kp ENT   &mo 2     &kp BSPC  &kp LCTL  &kp LALT
+            >;
+        };
+
+        /* レイヤー1 */
+        layer_1 {
+            bindings = <
+                &kp 1     &kp 2     &kp 3     &kp 4     &kp 5     &kp 6     &kp 7     &kp 8     &kp 9     &kp 0
+                &kp F1    &kp F2    &kp F3    &kp F4    &kp F5    &kp F6    &kp F7    &kp F8    &kp F9    &kp F10
+                &kp F11   &kp F12   &kp UP    &kp DOWN  &kp LEFT  &kp RIGHT &kp HOME  &kp END   &kp PGUP  &kp PGDN
+                &kp GRAVE &kp LBRC  &kp RBRC  &kp BSLS  &none     &kp DEL   &none     &none     &none     &none
+            >;
+        };
+
+        /* レイヤー2 */
+        layer_2 {
+            bindings = <
+                &kp EXLM  &kp AT    &kp HASH  &kp DLR   &kp PERC  &kp CIRC  &kp AMPR  &kp ASTR  &kp LPRN  &kp RPRN
+                &kp MINUS &kp PLUS  &kp EQL   &kp UNDS  &kp PIPE  &kp TILDE &kp LCBR  &kp RCBR  &kp LT    &kp GT
+                &kp QUES  &kp COLN  &kp QUOT  &kp DQUOT &kp CARET &none     &none     &none     &none     &none
+                &none     &none     &none     &none     &none     &none     &none     &none     &none     &none
+            >;
+        };
+    };
+};
+​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
