@@ -7,17 +7,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  # checkoutも最新バージョンに更新
-      - name: Build firmware
-        uses: zmkfirmware/zmk-action@main  # zmk-build-actionの代替として仮定
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          board: seeeduino_xiao_ble
-          shield: enigma
-          config: config/enigma.conf
-          keymap: config/enigma.keymap
+          python-version: '3.x'
+      - name: Install west and dependencies
+        run: |
+          pip install west
+          west init -l config
+          west update
+      - name: Build firmware
+        run: |
+          west build -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4  # v3からv4に更新
+        uses: actions/upload-artifact@v4
         with:
           name: enigma-firmware
           path: |
-            *.uf2
+            build/enigma/zephyr/*.uf2
