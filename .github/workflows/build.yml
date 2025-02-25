@@ -1,7 +1,7 @@
- name: Build ZMK Firmware
- on: [push]
- jobs:
-   build:
-     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
-     with:
-       config-path: "config"
+name: Build ZMK Firmware
+on: [push]
+jobs:
+  build:
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    with:
+      config-path: "config"
