@@ -1,0 +1,6 @@
+ ```yaml
+ name: Build ZMK Firmware
+ on: [push]
+ jobs:
+   build:
+     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
