@@ -6,49 +6,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: zmkfirmware/zmk-build-arm:stable
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: |
-          pip install west
-          sudo apt-get update
-          sudo apt-get install -y ninja-build gperf ccache dfu-util device-tree-compiler
-      - name: Install Zephyr SDK
-        run: |
-          wget -q https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.5/zephyr-sdk-0.16.5_linux-x86_64.tar.xz
-          mkdir -p ~/zephyr-sdk
-          tar -xf zephyr-sdk-0.16.5_linux-x86_64.tar.xz -C ~/zephyr-sdk --strip-components=1
-          ~/zephyr-sdk/setup.sh -t arm-zephyr-eabi
-      - name: Initialize and update West
-        env:
-          ZEPHYR_TOOLCHAIN_VARIANT: zephyr
-          ZEPHYR_SDK_INSTALL_DIR: ~/zephyr-sdk
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build Firmware
         run: |
           west init -l config
           west update
-          # 依存関係の詳細確認
-          ls -la
-          ls -la zephyr/ || echo "zephyr/ not found"
-          ls -la zmk/ || echo "zmk/ not found"
-          find . -name "ZephyrConfig.cmake" -o -name "zephyr-config.cmake" || echo "Zephyr config files not found"
-      - name: Build firmware
-        env:
-          ZEPHYR_TOOLCHAIN_VARIANT: zephyr
-          ZEPHYR_SDK_INSTALL_DIR: ~/zephyr-sdk
-          ZEPHYR_BASE: "${{ github.workspace }}/zephyr"
+          west build -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
+      - name: Rename Firmware
         run: |
-          echo "ZEPHYR_TOOLCHAIN_VARIANT=$ZEPHYR_TOOLCHAIN_VARIANT"
-          echo "ZEPHYR_SDK_INSTALL_DIR=$ZEPHYR_SDK_INSTALL_DIR"
-          echo "ZEPHYR_BASE=$ZEPHYR_BASE"
-          # Zephyr_DIR を保険として追加
-          west build -s zmk/app -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config" -DZephyr_DIR="${{ github.workspace }}/zephyr/share/zephyr-package/cmake"
-      - name: Upload artifacts
+          mv build/enigma/zephyr/zmk.uf2 enigma.uf2
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: enigma-firmware
           path: |
-            build/enigma/zephyr/*.uf2​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+            *.uf2
+​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
