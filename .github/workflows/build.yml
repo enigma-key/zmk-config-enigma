@@ -41,8 +41,6 @@ jobs:
         run: |
           west init -l config
           west update
-          # Zephyrのスクリプトをロードしてビルドコマンドを有効化
-          source ${{ github.workspace }}/zephyr/zephyr-env.sh
 
       - name: Debug Zephyr environment
         run: |
@@ -50,9 +48,13 @@ jobs:
           echo "ZEPHYR_SDK_INSTALL_DIR: $ZEPHYR_SDK_INSTALL_DIR"
           ls -la ${{ github.workspace }}/zephyr
           find ${{ github.workspace }} -name "ZephyrConfig.cmake" -o -name "zephyr-config.cmake"
+          source ${{ github.workspace }}/zephyr/zephyr-env.sh
           west -vv status
           west help
 
       - name: Build ZMK firmware
         run: |
+          # zephyr-env.shをsourceしてビルド環境を有効化
+          source ${{ github.workspace }}/zephyr/zephyr-env.sh
+          # west buildを実行
           west build -s ${{ github.workspace }}/zmk/app -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
