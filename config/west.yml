@@ -2,10 +2,13 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
+    - name: zephyrproject
+      url-base: https://github.com/zephyrproject-rtos
   projects:
     - name: zmk
       remote: zmkfirmware
-      revision: main
+      revision: main # または特定のコミット/ブランチ
       import: app/west.yml
-  self:
-    path: config
+    - name: zephyr
+      remote: zephyrproject
+      revision: main # または特定のバージョン（例: 
