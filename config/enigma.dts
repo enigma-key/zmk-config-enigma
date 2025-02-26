@@ -1,4 +1,4 @@
-/dts-v1/;
+#include <seeeduino_xiao_ble_nrf52840.dtsi>
 
 / {
     model = "Enigma";
@@ -32,4 +32,4 @@
             , <&gpio1 13 GPIO_ACTIVE_HIGH> // P1.13 (D8)
             , <&gpio1 14 GPIO_ACTIVE_HIGH>;// P1.14 (D9)
     };
-};
+};​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
