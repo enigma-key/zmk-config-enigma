@@ -23,4 +23,4 @@ jobs:
         with:
           name: enigma-firmware
           path: |
-            *.uf2​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+            *.uf2
