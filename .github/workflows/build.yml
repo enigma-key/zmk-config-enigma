@@ -14,7 +14,7 @@ jobs:
         run: |
           west init -l config
           west update
-          west build -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
+          west build -s zmk/app -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
       - name: Rename Firmware
         run: |
           mv build/enigma/zephyr/zmk.uf2 enigma.uf2
@@ -23,4 +23,4 @@ jobs:
         with:
           name: enigma-firmware
           path: |
-            *.uf2
+            *.uf2.​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
