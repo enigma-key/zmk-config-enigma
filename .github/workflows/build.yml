@@ -34,7 +34,7 @@ jobs:
         run: |
           echo "ZEPHYR_TOOLCHAIN_VARIANT=zephyr" >> $GITHUB_ENV
           echo "ZEPHYR_SDK_INSTALL_DIR=/home/runner/zephyr-sdk" >> $GITHUB_ENV
-          echo "PATH=/home/runner/zephyr-sdk/bin:$PATH" >> $GITHUB_ENV
+          echo "PATH=/home/runner/zephyr-sdk/bin:${{ github.workspace }}/zephyr/scripts:$PATH" >> $GITHUB_ENV
           echo "ZEPHYR_BASE=${{ github.workspace }}/zephyr" >> $GITHUB_ENV
 
       - name: Initialize and update west
@@ -44,17 +44,21 @@ jobs:
 
       - name: Debug Zephyr environment
         run: |
+          echo "Before sourcing zephyr-env.sh:"
           echo "ZEPHYR_BASE: $ZEPHYR_BASE"
-          echo "ZEPHYR_SDK_INSTALL_DIR: $ZEPHYR_SDK_INSTALL_DIR"
-          ls -la ${{ github.workspace }}/zephyr
-          find ${{ github.workspace }} -name "ZephyrConfig.cmake" -o -name "zephyr-config.cmake"
+          echo "PATH: $PATH"
+          west help
+          echo "Sourcing zephyr-env.sh..."
           source ${{ github.workspace }}/zephyr/zephyr-env.sh
+          echo "After sourcing zephyr-env.sh:"
+          echo "ZEPHYR_BASE: $ZEPHYR_BASE"
+          echo "PATH: $PATH"
           west -vv status
           west help
 
       - name: Build ZMK firmware
         run: |
-          # zephyr-env.shをsourceしてビルド環境を有効化
-          source ${{ github.workspace }}/zephyr/zephyr-env.sh
-          # west buildを実行
+          echo "Building with manual environment setup..."
+          export ZEPHYR_BASE=${{ github.workspace }}/zephyr
+          export PATH=${{ github.workspace }}/zephyr/scripts:$PATH
           west build -s ${{ github.workspace }}/zmk/app -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
