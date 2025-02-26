@@ -1,26 +1,47 @@
-name: Build Enigma Firmware
+name: Build ZMK Firmware
+
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: zmkfirmware/zmk-build-arm:stable
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build Firmware
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build python3-pip git
+          pip3 install west
+
+      - name: Install Zephyr SDK
+        run: |
+          wget -q https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.1/zephyr-sdk-0.16.1_linux-x86_64.tar.xz
+          mkdir -p ~/zephyr-sdk
+          tar -xJf zephyr-sdk-0.16.1_linux-x86_64.tar.xz -C ~/zephyr-sdk --strip-components=1
+          ~/zephyr-sdk/setup.sh -t all
+
+      - name: Initialize and update west
         run: |
           west init -l config
           west update
-          west build -s zmk/app -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
-      - name: Rename Firmware
+
+      - name: Build ZMK firmware
+        env:
+          ZEPHYR_BASE: ${{ github.workspace }}/zephyr
         run: |
-          mv build/enigma/zephyr/zmk.uf2 enigma.uf2
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+          west build -s zmk/app -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: enigma-firmware
-          path: |
-            *.uf2.​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+          name: firmware
+          path: build/enigma/zephyr/zmk.uf2
