@@ -41,6 +41,8 @@ jobs:
         run: |
           west init -l config
           west update
+          # Zephyrのスクリプトをロードしてビルドコマンドを有効化
+          source ${{ github.workspace }}/zephyr/zephyr-env.sh
 
       - name: Debug Zephyr environment
         run: |
@@ -49,6 +51,7 @@ jobs:
           ls -la ${{ github.workspace }}/zephyr
           find ${{ github.workspace }} -name "ZephyrConfig.cmake" -o -name "zephyr-config.cmake"
           west -vv status
+          west help
 
       - name: Build ZMK firmware
         run: |
