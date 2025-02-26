@@ -45,4 +45,3 @@ jobs:
         with:
           name: firmware
           path: build/enigma/zephyr/zmk.uf2
-​​​​​​​​​​​​​​​​​​​​​​​​​​​
