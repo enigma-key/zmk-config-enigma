@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4  # v3からv4に更新
 
       - name: Install dependencies
         run: |
@@ -41,7 +41,8 @@ jobs:
           west build -s zmk/app -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # v3からv4に更新
         with:
           name: firmware
           path: build/enigma/zephyr/zmk.uf2
+​​​​​​​​​​​​​​​​​​​​​​​​​​​
