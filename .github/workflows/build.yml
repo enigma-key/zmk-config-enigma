@@ -30,18 +30,18 @@ jobs:
         run: |
           west init -l config
           west update
-          # West update後のディレクトリ確認
-          ls -la
+          # zephyr/ 内の構造を確認
           ls -la zephyr/
+          find zephyr/ -name "ZephyrConfig.cmake" -o -name "zephyr-config.cmake"
       - name: Build firmware
         env:
           ZEPHYR_TOOLCHAIN_VARIANT: zephyr
           ZEPHYR_SDK_INSTALL_DIR: ~/zephyr-sdk
-          CMAKE_PREFIX_PATH: "${{ github.workspace }}/zephyr/cmake"
+          ZEPHYR_BASE: "${{ github.workspace }}/zephyr"
         run: |
           echo "ZEPHYR_TOOLCHAIN_VARIANT=$ZEPHYR_TOOLCHAIN_VARIANT"
           echo "ZEPHYR_SDK_INSTALL_DIR=$ZEPHYR_SDK_INSTALL_DIR"
-          echo "CMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH"
+          echo "ZEPHYR_BASE=$ZEPHYR_BASE"
           west build -s zmk/app -p auto -b seeeduino_xiao_ble -d build/enigma -- -DSHIELD=enigma -DZMK_CONFIG="${{ github.workspace }}/config"
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
